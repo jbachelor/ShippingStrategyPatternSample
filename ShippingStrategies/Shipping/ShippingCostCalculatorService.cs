@@ -3,6 +3,13 @@ namespace ShippingStrategies.Shipping
 {
     public class ShippingCostCalculatorService
     {
+        private readonly IShippingCostStrategy _shippingCostStrategy;
+
+        public ShippingCostCalculatorService(IShippingCostStrategy shippingCostStrategy)
+        {
+            _shippingCostStrategy = shippingCostStrategy;
+        }
+
         public decimal CalculateShippingCost(Order order)
         {
             switch (order.ShippingMethod)

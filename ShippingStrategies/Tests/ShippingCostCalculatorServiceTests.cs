@@ -13,7 +13,7 @@ namespace ShippingStrategies.Tests
         [DataRow(ShippingOptions.FedEx, 5.10)]
         public void TestUPSShippingIs425(ShippingOptions shippingMethod, double expectedCost)
         {
-            var shippingCalculator = new ShippingCostCalculatorService();
+            var shippingCalculator = new ShippingCostCalculatorService(null);
             var order = TestHelpers.CreateOrder(shippingMethod);
             var cost = shippingCalculator.CalculateShippingCost(order);
             Assert.AreEqual((decimal)expectedCost, cost);
