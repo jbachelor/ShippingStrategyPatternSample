@@ -13,7 +13,23 @@ namespace ShippingStrategies.Tests
         [DataRow(ShippingOptions.FedEx, 5.10)]
         public void TestUPSShippingIs425(ShippingOptions shippingMethod, double expectedCost)
         {
-            var shippingCalculator = new ShippingCostCalculatorService(null);
+            IShippingCostStrategy shippingCostStrategy;
+            switch (shippingMethod)
+            {
+                case ShippingOptions.FedEx:
+                    shippingCostStrategy = new ShippingCostStrategyFedEx();
+                    break;
+                case ShippingOptions.UPS:
+                    shippingCostStrategy = new ShippingCostStrategyUPS();
+                    break;
+                case ShippingOptions.USPS:
+                    shippingCostStrategy = new ShippingCostStrategyUSPS();
+                    break;
+                default:
+                    throw new ArgumentException($"Unknown shipping method: {shippingMethod}");
+            }
+
+            var shippingCalculator = new ShippingCostCalculatorService(shippingCostStrategy);
             var order = TestHelpers.CreateOrder(shippingMethod);
             var cost = shippingCalculator.CalculateShippingCost(order);
             Assert.AreEqual((decimal)expectedCost, cost);
